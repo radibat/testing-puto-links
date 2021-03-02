@@ -1,0 +1,12 @@
+-------------------------------------------------------------------------------
+Test set: TestSocialLinks
+-------------------------------------------------------------------------------
+Tests run: 9, Failures: 2, Errors: 0, Skipped: 0, Time elapsed: 162.495 s <<< FAILURE! - in TestSocialLinks
+openRequestForm{String, String}[3]  Time elapsed: 22.567 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: <17> but was: <16>
+	at TestSocialLinks.openRequestForm(TestSocialLinks.java:58)
+
+openRequestForm{String, String}[5]  Time elapsed: 5.644 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: <6> but was: <5>
+	at TestSocialLinks.openRequestForm(TestSocialLinks.java:58)
+
