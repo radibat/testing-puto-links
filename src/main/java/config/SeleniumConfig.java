@@ -16,21 +16,20 @@ public class SeleniumConfig {
     private WebDriver driver;
     static String driverName;
 
-    public SeleniumConfig() {
-        //Capabilities capabilities = DesiredCapabilities.chrome();
-        ChromeOptions options = new ChromeOptions();
-        System.out.println("Создаем драйвер");
-        options.addArguments("--headless");
-        driver = new ChromeDriver(options);
-        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-    }
-
     static {
         driverName = "chromedriver";
         if(System.getProperty("os.name").toLowerCase().contains("win")) {
             driverName += ".exe";
         }
         System.setProperty("webdriver.chrome.driver", findFile(driverName));
+    }
+
+    public SeleniumConfig() {
+        Capabilities capabilities = DesiredCapabilities.chrome();
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless");
+        driver = new ChromeDriver(options);
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
     }
 
     static private String findFile(String filename) {
