@@ -1,11 +1,14 @@
 import io.qameta.allure.*;
 import io.qameta.allure.model.Status;
+import org.apache.log4j.PropertyConfigurator;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,6 +20,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @TestMethodOrder(OrderAnnotation.class)
 public class TestSocialLinks {
 
+    private static Logger log = LoggerFactory.getLogger(TestSocialLinks.class);
+
+
     static String ContextURL = "https://uslugi.admtyumen.ru";
     private static BaseTestLink BaseTestLink;
     private String expectedTitle = "Запрашиваемая вами услуга была удалена из РГУ.";
@@ -27,6 +33,7 @@ public class TestSocialLinks {
     static void setUp() throws IOException {
         BaseTestLink = new BaseTestLink(ContextURL);
         step("Открытие браузера для тестируемого контекста");
+        log.info("Opening the browser");
     }
 
     @ParameterizedTest(name = " {index}. Страница {0}, ссылка {1}")
@@ -54,7 +61,8 @@ public class TestSocialLinks {
                 step("Битая ссылка: "+ titleHref +  ", " + href, Status.FAILED);
             }
         }
-        System.out.println(count + " из " + links.size());
+        log.info(count + " out of "  + links.size() + " correct links");
+       // System.out.println(count + " из " + links.size());
         assertEquals(links.size(), count);
     }
 

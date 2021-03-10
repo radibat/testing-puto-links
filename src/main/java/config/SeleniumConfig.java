@@ -6,7 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.DesiredCapabilities;
+//import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
@@ -25,7 +25,7 @@ public class SeleniumConfig {
     }
 
     public SeleniumConfig() {
-        Capabilities capabilities = DesiredCapabilities.chrome();
+        //Capabilities capabilities = DesiredCapabilities.chrome();
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless");
         driver = new ChromeDriver(options);
