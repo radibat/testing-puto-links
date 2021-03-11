@@ -1,20 +1,24 @@
 package config;
 
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-//import org.openqa.selenium.remote.DesiredCapabilities;
-
+import properties.Proper;
 import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 public class SeleniumConfig {
 
     private WebDriver driver;
     static String driverName;
+
+    private static Logger log = LogManager.getLogger(SeleniumConfig.class);
 
     static {
         driverName = "chromedriver";
@@ -24,10 +28,13 @@ public class SeleniumConfig {
         System.setProperty("webdriver.chrome.driver", findFile(driverName));
     }
 
-    public SeleniumConfig() {
+    public SeleniumConfig() throws IOException {
         //Capabilities capabilities = DesiredCapabilities.chrome();
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless");
+        if (Proper.getProps().getProperty("headless").equals("true")) {
+            options.addArguments("--headless");
+            log.info("Headless mode selenium");
+        }
         driver = new ChromeDriver(options);
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
     }

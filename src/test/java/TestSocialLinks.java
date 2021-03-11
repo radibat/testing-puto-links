@@ -9,10 +9,11 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
+import properties.Proper;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import static io.qameta.allure.Allure.step;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,8 +22,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class TestSocialLinks {
 
     private static Logger log = LogManager.getLogger(TestSocialLinks.class);
+    Properties property = new Properties();
 
-    static String ContextURL = "https://uslugi.admtyumen.ru";
+    static String ContextURL;
+
+    static {
+        try {
+            ContextURL = Proper.getProps().getProperty("ContextURL");
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+    }
+
     private static BaseTestLink BaseTestLink;
     private String expectedTitle = "Запрашиваемая вами услуга была удалена из РГУ.";
     private int countLinks = 5;
@@ -31,6 +42,7 @@ public class TestSocialLinks {
     @BeforeAll
     static void setUp() throws IOException {
         BaseTestLink = new BaseTestLink(ContextURL);
+        BaseTestLink.GetSocialSections( ContextURL + "/social.htm");
         step("Открытие браузера для тестируемого контекста");
         log.info("Opening browser");
     }
@@ -39,9 +51,9 @@ public class TestSocialLinks {
     @CsvFileSource(resources = "/socialLinks.csv")
     @Features(value = {@Feature(value = "Проверка ссылок"), @Feature(value = "Социальное обеспечение")})
     void openRequestForm(String name, String link) {
-        links = BaseTestLink.GetListLinks(ContextURL + link);
+        links = BaseTestLink.GetListLinks(link); //ContextURL +
         int count = 0;
-        Allure.addAttachment(name, "text/uri-list", ContextURL + link);
+        Allure.addAttachment(name, "text/uri-list", link); //ContextURL +
         step("Количество ссылок на странице: " + links.size());
 
         log.info("Page testing started: "  + name);
@@ -58,7 +70,7 @@ public class TestSocialLinks {
                 step("Корректная ссылка: " + titleHref);
             }
             else {
-                log.warn("Incorrect link " + href + " with name " + titleHref + "on page" + name); ;
+                log.warn("Incorrect link " + href + " with name " + titleHref + " on page " + name); ;
                 step("Битая ссылка: "+ titleHref +  ", " + href, Status.FAILED);
             }
         }
