@@ -1,14 +1,14 @@
 import io.qameta.allure.*;
 import io.qameta.allure.model.Status;
-import org.apache.log4j.PropertyConfigurator;
+//import org.apache.log4j.PropertyConfigurator;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,8 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @TestMethodOrder(OrderAnnotation.class)
 public class TestSocialLinks {
 
-    private static Logger log = LoggerFactory.getLogger(TestSocialLinks.class);
-
+    private static Logger log = LogManager.getLogger(TestSocialLinks.class);
 
     static String ContextURL = "https://uslugi.admtyumen.ru";
     private static BaseTestLink BaseTestLink;
@@ -33,7 +32,7 @@ public class TestSocialLinks {
     static void setUp() throws IOException {
         BaseTestLink = new BaseTestLink(ContextURL);
         step("Открытие браузера для тестируемого контекста");
-        log.info("Opening the browser");
+        log.info("Opening browser");
     }
 
     @ParameterizedTest(name = " {index}. Страница {0}, ссылка {1}")
@@ -45,6 +44,7 @@ public class TestSocialLinks {
         Allure.addAttachment(name, "text/uri-list", ContextURL + link);
         step("Количество ссылок на странице: " + links.size());
 
+        log.info("Start page test: "  + name);
 
         for (int i = 0; i < links.size(); i++)
         {
@@ -57,12 +57,12 @@ public class TestSocialLinks {
                 count++;
                 step("Корректная ссылка: " + titleHref);
             }
-            else { System.out.println("Битая ссылка " + href);
+            else {
+                log.warn("Incorrect link " + href + " with name " + titleHref); ;
                 step("Битая ссылка: "+ titleHref +  ", " + href, Status.FAILED);
             }
         }
         log.info(count + " out of "  + links.size() + " correct links");
-       // System.out.println(count + " из " + links.size());
         assertEquals(links.size(), count);
     }
 
@@ -70,6 +70,7 @@ public class TestSocialLinks {
     @AfterAll
     public static void tearDown() {
         BaseTestLink.closeWindow();
+        log.info("Closing browser");
         step("Закрытие браузера для тестируемого контекста");
     }
 }
