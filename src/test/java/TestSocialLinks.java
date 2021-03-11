@@ -44,7 +44,7 @@ public class TestSocialLinks {
         Allure.addAttachment(name, "text/uri-list", ContextURL + link);
         step("Количество ссылок на странице: " + links.size());
 
-        log.info("Start page test: "  + name);
+        log.info("Page testing started: "  + name);
 
         for (int i = 0; i < links.size(); i++)
         {
@@ -58,7 +58,7 @@ public class TestSocialLinks {
                 step("Корректная ссылка: " + titleHref);
             }
             else {
-                log.warn("Incorrect link " + href + " with name " + titleHref); ;
+                log.warn("Incorrect link " + href + " with name " + titleHref + "on page" + name); ;
                 step("Битая ссылка: "+ titleHref +  ", " + href, Status.FAILED);
             }
         }
